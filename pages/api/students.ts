@@ -1,0 +1,15 @@
+import type { NextApiRequest, NextApiResponse } from 'next'
+import axios from 'axios'
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const { event_id } = req.query
+  try {
+    const url = `${process.env.WP_URL}/wp-json/graston/v1/profiles?event_id=${event_id}`
+    const response = await axios.get(url, {
+      headers: { Authorization: `Basic ${process.env.GR_ASTON_WP_BASIC_AUTH}` }
+    })
+    res.status(200).json(response.data)
+  } catch (err: any) {
+    res.status(err.response?.status || 500).json({ error: 'API error' })
+  }
+}
