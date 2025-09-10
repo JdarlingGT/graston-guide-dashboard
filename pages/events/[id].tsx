@@ -49,8 +49,12 @@ export default function EventDetailPage() {
   const fetchEventDetail = async () => {
     try {
       const response = await fetch(`/api/events/${id}`)
-      const data = await response.json()
-      setEvent(data)
+      if (response.ok) {
+        const data = await response.json()
+        setEvent(data)
+      } else {
+        throw new Error('API error')
+      }
     } catch (error) {
       console.error('Error fetching event detail:', error)
       // Mock data for development
@@ -72,8 +76,12 @@ export default function EventDetailPage() {
   const fetchStudents = async () => {
     try {
       const response = await fetch(`/api/students?event_id=${id}`)
-      const data = await response.json()
-      setStudents(data)
+      if (response.ok) {
+        const data = await response.json()
+        setStudents(Array.isArray(data) ? data : [])
+      } else {
+        throw new Error('API error')
+      }
     } catch (error) {
       console.error('Error fetching students:', error)
       // Mock data for development
